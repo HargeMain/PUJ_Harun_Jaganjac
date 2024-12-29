@@ -11,6 +11,7 @@ import org.harunjaganjac.example.models.Employee;
 import org.harunjaganjac.example.models.Project;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ProjectService {
@@ -85,7 +86,7 @@ public final class ProjectService {
     }
     public List<Project> getAllProjects() {
         try {
-            List<Project> projects = null;
+            List<Project> projects = new ArrayList<>();
             for (Document doc : projectCollection.find()) {
                 projects.add(new Project(
                         doc.getString("id"),
