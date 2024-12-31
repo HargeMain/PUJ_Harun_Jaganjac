@@ -20,7 +20,16 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.11.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>jgoodies-forms</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>svgSalamander</artifactId>
+            <version>1.1.4</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>

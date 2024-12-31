@@ -14,10 +14,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class UserServices {
+public final class UserService {
     private final MongoCollection<Document> userCollection;
 
-    public UserServices() {
+    public UserService() {
         DataContext.connect();
         this.userCollection = DataContext.database.getCollection("users");
     }
@@ -39,14 +39,14 @@ public final class UserServices {
                 return null;
             }
         } catch (Exception e) {
-            DataContext.getLogger().error("Error logging in: ", e);
+            DataContext.getLogger().error("Error logging in:  ", e);
             return null;
         }
     }
     public boolean registerUserWithRole(String username,String password,String email, String role) {
         try {
-            // Check if username or email already exists
-            if (userCollection.find(Filters.or(
+            // Check if username or password already exists
+            if (userCollection.find(Filters.and(
                     Filters.eq("username", username),
                     Filters.eq("password", password)
             )).first() != null) {
@@ -99,11 +99,10 @@ public final class UserServices {
     }
     public List<User> getAllUsers() {
         try {
-            List<User> users = null;
+            List<User> users = new ArrayList<>();
             for (Document doc : userCollection.find()) {
-                if (users == null) {
-                    users = new ArrayList<>();
-                }
+                if(doc.getString("role").equals("admin") || doc.getString("role").equals("superadmin"))
+                    continue;
                 users.add(new User(
                         doc.getString("id"),
                         doc.getString("username"),

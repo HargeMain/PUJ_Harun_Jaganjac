@@ -1,13 +1,13 @@
 package org.harunjaganjac.example.controllers;
 
 import org.harunjaganjac.example.models.User;
-import org.harunjaganjac.example.services.UserServices;
+import org.harunjaganjac.example.services.UserService;
 
 import java.util.List;
 
 public final class UserController {
-    private final UserServices userService;
-    public UserController(UserServices userService) {
+    private final UserService userService;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
     public boolean createUser(String username, String email, String password, String role) {

@@ -16,13 +16,25 @@ public final class User {
         this.role = role;
     }
 
-    public User(String id, String email, String username, String password, String createdAt, String role) {
+    public User(String id,  String username ,String email, String password, String createdAt, String role) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
         this.createdAt = createdAt;
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 
     public User(String username, String email, String password, String role) {
