@@ -6,6 +6,7 @@ import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.harunjaganjac.example.datacontext.DataContext;
+import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.util.List;
 
@@ -14,8 +15,8 @@ public final class EmployeeProjectService {
     private final MongoCollection<Document> projectCollection;
     public EmployeeProjectService() {
         DataContext.connect();
-        this.employeeCollection = DataContext.database.getCollection("employees");
-        this.projectCollection = DataContext.database.getCollection("projects");
+        this.employeeCollection = DataContext.database.getCollection(CollectionNames.EMPLOYEES);
+        this.projectCollection = DataContext.database.getCollection(CollectionNames.PROJECTS);
     }
     public boolean assignProject(String employeeId, String projectId) {
         try {

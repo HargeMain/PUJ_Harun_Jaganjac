@@ -1,64 +1,63 @@
 package org.harunjaganjac.example.ui;
 
 import com.kitfox.svg.app.beans.SVGIcon;
+import org.harunjaganjac.example.baseform.BaseForm;
 import org.harunjaganjac.example.controllers.UserController;
 import org.harunjaganjac.example.helpers.ValidationsHelpers;
+import org.harunjaganjac.example.models.User;
 import org.harunjaganjac.example.services.UserService;
 import org.harunjaganjac.example.staticdata.Titles;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class Register extends JFrame {
+public class Register extends BaseForm {
 
-    private JPanel panel1;
-    private JLabel TitleHeader;
-    private JTextField textField1;
+    private JPanel mainPanel;
+    private JLabel titleHeader;
+    private JTextField usernameField;
     private JButton loginButton;
     private JButton registerButton;
     private JButton hideShowPasswordButton;
-    private JPasswordField passwordField1;
+    private JPasswordField passwordField;
+    private final UserService userService;
 
-    public Register(){
-        setTitle(Titles.ApplicationTitle);
-        setSize(500,500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setContentPane(panel1);
+    public Register(User registerUser){
+        super(false);
+        setContentPane(mainPanel);
+        this.userService=new UserService();
         setSvgIcons("/images/view-hide-svgrepo-com.svg",false);
-        passwordField1.setEchoChar((char)0);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                var userServices=new UserService();
-                var loginController=new UserController(userServices);
-                var username=textField1.getText();
-                var password=new String(passwordField1.getPassword());
-                if(!TestValidations(username,password)){
-                    return;
-                }
-                var user=loginController.login(username,password);
-                if(user!=null){
-                    dispose();
-                    new Dashboard(user);
-                    }else{
-                        JOptionPane.showMessageDialog(null,"Login failed");
-                    }
+        passwordField.setEchoChar((char)0);
+        if(registerUser!=null){
+            usernameField.setText(registerUser.getUsername());
+            passwordField.setText(registerUser.getPassword());
         }
-        });
-        hideShowPasswordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(passwordField1.getEchoChar()==0){
-                    passwordField1.setEchoChar('*');
-                   setSvgIcons("/images/view-svgrepo-com.svg",true);
+        loginButton.addActionListener(e -> {
+            var loginController=new UserController(userService);
+            var username= usernameField.getText();
+            var password=new String(passwordField.getPassword());
+            if(!TestValidations(username,password)){
+                return;
+            }
+            var user=loginController.login(username,password);
+            if(user!=null){
+                dispose();
+                new Dashboard(user);
                 }else{
-                    passwordField1.setEchoChar((char)0);
-                    setSvgIcons("/images/view-hide-svgrepo-com.svg",false);
+                    JOptionPane.showMessageDialog(null,"Login failed");
                 }
+    });
+        registerButton.addActionListener(e -> {
+            dispose();
+            new UserCreator();
+        });
+        hideShowPasswordButton.addActionListener(e -> {
+            if(passwordField.getEchoChar()==0){
+                passwordField.setEchoChar('*');
+               setSvgIcons("/images/view-svgrepo-com.svg",true);
+            }else{
+                passwordField.setEchoChar((char)0);
+                setSvgIcons("/images/view-hide-svgrepo-com.svg",false);
             }
         });
     }
@@ -95,6 +94,6 @@ public class Register extends JFrame {
     }
     //Inner helpers --END
     private void createUIComponents() {
-        TitleHeader=new JLabel(Titles.ApplicationTitle);
+        titleHeader =new JLabel(Titles.ApplicationTitle);
     }
 }

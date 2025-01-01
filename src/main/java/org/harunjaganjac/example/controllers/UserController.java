@@ -1,6 +1,7 @@
 package org.harunjaganjac.example.controllers;
 
 import org.harunjaganjac.example.models.User;
+import org.harunjaganjac.example.response.RegisterResponse;
 import org.harunjaganjac.example.services.UserService;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public final class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    public boolean createUser(String username, String email, String password, String role) {
+    public RegisterResponse createUser(String username, String email, String password, String role) {
         return userService.registerUserWithRole(username, email, password, role);
     }
     public boolean resetPassword( String username, String newPassword) {

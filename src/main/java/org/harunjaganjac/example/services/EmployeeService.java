@@ -8,6 +8,7 @@ import org.bson.conversions.Bson;
 import org.harunjaganjac.example.datacontext.DataContext;
 import org.harunjaganjac.example.helpers.GeneratorHelpers;
 import org.harunjaganjac.example.models.Employee;
+import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public final class EmployeeService {
 
     public EmployeeService() {
         DataContext.connect();
-        this.employeeCollection = DataContext.database.getCollection("employees");
+        this.employeeCollection = DataContext.database.getCollection(CollectionNames.EMPLOYEES);
     }
 
     public boolean createEmployee(Employee employee) {

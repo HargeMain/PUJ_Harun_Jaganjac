@@ -9,6 +9,7 @@ import org.harunjaganjac.example.datacontext.DataContext;
 import org.harunjaganjac.example.helpers.GeneratorHelpers;
 import org.harunjaganjac.example.models.Employee;
 import org.harunjaganjac.example.models.Project;
+import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public final class ProjectService {
     private final MongoCollection<Document> projectCollection;
     public ProjectService() {
         DataContext.connect();
-        this.projectCollection = DataContext.database.getCollection("projects");
+        this.projectCollection = DataContext.database.getCollection(CollectionNames.PROJECTS);
     }
     public boolean createProject(Project project) {
         try {

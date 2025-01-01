@@ -9,6 +9,8 @@ import org.harunjaganjac.example.datacontext.DataContext;
 import org.harunjaganjac.example.helpers.GeneratorHelpers;
 import org.harunjaganjac.example.models.Project;
 import org.harunjaganjac.example.models.User;
+import org.harunjaganjac.example.response.RegisterResponse;
+import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public final class UserService {
 
     public UserService() {
         DataContext.connect();
-        this.userCollection = DataContext.database.getCollection("users");
+        this.userCollection = DataContext.database.getCollection(CollectionNames.USERS);
     }
 
     public User login(String username, String password) {
@@ -43,15 +45,20 @@ public final class UserService {
             return null;
         }
     }
-    public boolean registerUserWithRole(String username,String password,String email, String role) {
+    public RegisterResponse registerUserWithRole(String username, String password, String email, String role) {
         try {
             // Check if username or password already exists
             if (userCollection.find(Filters.and(
                     Filters.eq("username", username),
                     Filters.eq("password", password)
             )).first() != null) {
-                DataContext.getLogger().error("Username or password already exists.");
-                return false;
+                DataContext.getLogger().error("User with this data  already exists.");
+                return new RegisterResponse("User with this data already exists.", false, null);
+            }
+            //Check if email already exists
+            if (userCollection.find(Filters.eq("email", email)).first() != null) {
+                DataContext.getLogger().error("User with this email already exists.");
+                return new RegisterResponse("User with this email already exists.", false, null);
             }
 
             String newId = GeneratorHelpers.generateId();
@@ -65,10 +72,10 @@ public final class UserService {
                    .append("createdAt", user.getCreatedAt());
             userCollection.insertOne(doc);
             DataContext.getLogger().info("User registered with ID: " + newId);
-            return true;
+            return new RegisterResponse("User registered successfully", true, new User(user.getUsername(), user.getEmail(), user.getPassword()));
         } catch (Exception e) {
             DataContext.getLogger().error("Error registering user: ", e);
-            return false;
+            return new RegisterResponse("Error registering user", false, null);
         }
     }
     public boolean resetPassword(String username, String newPassword) {

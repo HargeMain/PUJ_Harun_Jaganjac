@@ -1,25 +1,22 @@
 package org.harunjaganjac.example.ui;
 
+import org.harunjaganjac.example.baseform.BaseForm;
 import org.harunjaganjac.example.models.User;
 
 import javax.swing.*;
 
-public class Dashboard extends JFrame {
+public class Dashboard extends BaseForm {
     private JPanel panel1;
     private JButton logOutButton;
     private JLabel userData;
 
     public Dashboard(User user){
-        setTitle("Dashboard");
-        setSize(500,500);
+        super(true);
         userData.setText(user.getRole());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
         setContentPane(panel1);
         logOutButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(null,"Logging out");
-            new Register();
+            new Register(null);
         });
     }
 }

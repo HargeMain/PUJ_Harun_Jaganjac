@@ -52,4 +52,7 @@ public final class ValidationsHelpers {
     public static boolean isValidEmployeeProjectProjectId(String employeeProjectProjectId) {
         return employeeProjectProjectId.matches("^[0-9a-f)A-F]{24}$");
     }
+    public static boolean isPasswordMatch(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
+    }
 }
