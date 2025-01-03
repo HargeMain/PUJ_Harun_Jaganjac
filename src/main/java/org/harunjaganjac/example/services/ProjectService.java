@@ -90,7 +90,7 @@ public final class ProjectService {
             List<Project> projects = new ArrayList<>();
             for (Document doc : projectCollection.find()) {
                 projects.add(new Project(
-                        doc.getString("id"),
+                        doc.getString("_id"),
                         doc.getString("name"),
                         doc.getString("description"),
                         doc.getString("startDate"),

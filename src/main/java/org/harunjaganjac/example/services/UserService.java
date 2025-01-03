@@ -78,20 +78,31 @@ public final class UserService {
             return new RegisterResponse("Error registering user", false, null);
         }
     }
-    public boolean resetPassword(String username, String newPassword) {
+    public RegisterResponse resetPassword(String username,String oldPassword, String newPassword) {
         try {
-            Document doc = userCollection.find(Filters.eq("username", username)).first();
+            Document doc = userCollection.find(Filters.and(
+                    Filters.eq("username", username),
+                    Filters.eq("password", oldPassword)
+            )).first();
             if (doc != null) {
+                if(oldPassword.equals(newPassword)){
+                    return new RegisterResponse("The new password is the same as the old password", false, null);
+                }
+                Document user = userCollection.find(Filters.eq("password", newPassword)).first();
+                if(user != null){
+                    return new RegisterResponse("The new password is already in the system", false, null);
+                }
                 Bson filter = Filters.eq("username", username);
                 Bson updates = Updates.set("password", newPassword);
                 userCollection.updateOne(filter, updates);
                 DataContext.getLogger().info("Password reset for user: " + username);
-                return true;
+                return new RegisterResponse("Password reset successfully", true, null);
+            }else{
+                return new RegisterResponse("The old password for user doesnt match", false, null);
             }
-            return false;
         } catch (Exception e) {
             DataContext.getLogger().error("Error resetting password: ", e);
-            return false;
+            return new RegisterResponse("Error resetting password", false, null);
         }
     }
     public boolean deleteUser(String username) {
@@ -108,15 +119,15 @@ public final class UserService {
         try {
             List<User> users = new ArrayList<>();
             for (Document doc : userCollection.find()) {
-                if(doc.getString("role").equals("admin") || doc.getString("role").equals("superadmin"))
+                if(doc.getString("role").equals("superadmin"))
                     continue;
                 users.add(new User(
                         doc.getString("id"),
                         doc.getString("username"),
                         doc.getString("email"),
                         doc.getString("password"),
-                        doc.getString("role"),
-                        doc.getString("createdAt")
+                        doc.getString("createdAt"),
+                        doc.getString("role")
                 ));
             }
             return users;
