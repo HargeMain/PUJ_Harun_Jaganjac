@@ -4,6 +4,9 @@ import com.kitfox.svg.app.beans.SVGIcon;
 import org.harunjaganjac.example.baseform.BaseForm;
 import org.harunjaganjac.example.controllers.EmployeeController;
 import org.harunjaganjac.example.controllers.ProjectController;
+import org.harunjaganjac.example.controllers.UserController;
+import org.harunjaganjac.example.models.Employee;
+import org.harunjaganjac.example.models.Project;
 import org.harunjaganjac.example.models.User;
 import org.harunjaganjac.example.services.EmployeeProjectService;
 import org.harunjaganjac.example.services.EmployeeService;
@@ -65,7 +68,7 @@ public class Dashboard extends BaseForm {
                 rotationScreen.setLayout(new BorderLayout());
                 var projectController = new ProjectController(projectService,employeeProjectService);
                 var projects = projectController.getAllProjects();
-                var table=createGenericTable(projects);
+                var table=createGenericTable(projects,user.getRole());
                 rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
                 rotationScreen.revalidate();
                 rotationScreen.repaint();
@@ -80,7 +83,7 @@ public class Dashboard extends BaseForm {
                 rotationScreen.setLayout(new BorderLayout());
                 var employeeController = new EmployeeController(employeeService,employeeProjectService);
                 var employees = employeeController.getAllEmployees();
-                var table=createGenericTable(employees);
+                var table=createGenericTable(employees,user.getRole());
                 rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
                 rotationScreen.revalidate();
                 rotationScreen.repaint();
@@ -94,7 +97,7 @@ public class Dashboard extends BaseForm {
                 rotationScreen.removeAll();
                 rotationScreen.setLayout(new BorderLayout());
                 var users = userService.getAllUsers();
-                var table=createGenericTable(users);
+                var table=createGenericTable(users,user.getRole());
                 rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
                 rotationScreen.revalidate();
                 rotationScreen.repaint();
@@ -165,7 +168,7 @@ public class Dashboard extends BaseForm {
             e.printStackTrace();
         }
     }
-    private <T> JTable createGenericTable(List<T> data) {
+    private <T> JTable createGenericTable(List<T> data, String role) {
         if (data == null || data.isEmpty()) {
             return new JTable();
         }
@@ -236,7 +239,54 @@ public class Dashboard extends BaseForm {
         };
 
         table.setRowHeight(30);
+        if (!role.equals("default")) {
+            JPopupMenu popupMenu = new JPopupMenu();
+            JMenuItem addItem = new JMenuItem("Add");
+            JMenuItem editItem = new JMenuItem("Edit");
+            JMenuItem deleteItem = new JMenuItem("Delete");
 
+            popupMenu.add(addItem);
+            popupMenu.add(editItem);
+            popupMenu.add(deleteItem);
+
+            table.setComponentPopupMenu(popupMenu);
+
+            addItem.addActionListener(e -> {
+                // Implement add functionality
+                // Example: show a dialog to add a new item
+            });
+
+            editItem.addActionListener(e -> {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    Object id = table.getValueAt(selectedRow, 0);
+                }
+            });
+
+            deleteItem.addActionListener(e -> {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete "+table.getValueAt(selectedRow, 1)+" ?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        Object id = table.getValueAt(selectedRow, 0);
+                        if (clazz.equals(User.class)) {
+                            var userController = new UserController(userService);
+                            userController.deleteUser((String) id);
+                            usersNav.doClick();
+                        } else if (clazz.equals(Project.class)) {
+                            var projectController = new ProjectController(projectService, employeeProjectService);
+                            projectController.deleteProject((String) id);
+                            projectsNav.doClick();
+                        } else if (clazz.equals(Employee.class)) {
+                            var employeeController = new EmployeeController(employeeService, employeeProjectService);
+                            employeeController.deleteEmployee((String) id);
+                            employeesNav.doClick();
+                        }
+                        model.removeRow(selectedRow);
+                    }
+                }
+            });
+        }
         return table;
     }
     private void selectedNav(JButton buttonThatWasClicked){

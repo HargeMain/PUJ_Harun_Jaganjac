@@ -77,7 +77,7 @@ public final class ProjectService {
     }
     public boolean deleteProject(String id) {
         try {
-            projectCollection.deleteOne(new Document("id", id));
+            projectCollection.deleteOne(new Document("_id", id));
             DataContext.getLogger().info("Project deleted with ID: " + id);
             return true;
         } catch (Exception e) {

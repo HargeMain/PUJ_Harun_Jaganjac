@@ -25,7 +25,7 @@ public final class EmployeeService {
         try {
             String newId = GeneratorHelpers.generateId();
             employee.setId(newId);
-            Document doc = new Document("id", employee.getId())
+            Document doc = new Document("_id", employee.getId())
                     .append("firstName", employee.getFirstName())
                     .append("lastName", employee.getLastName())
                     .append("position", employee.getPosition())
@@ -45,7 +45,7 @@ public final class EmployeeService {
             Document doc = employeeCollection.find(Filters.eq("id", id)).first();
             if (doc != null) {
                 return new Employee(
-                        doc.getString("id"),
+                        doc.getString("_id"),
                         doc.getString("firstName"),
                         doc.getString("lastName"),
                         doc.getString("position"),
@@ -63,7 +63,7 @@ public final class EmployeeService {
 
     public boolean updateEmployee(String id, Employee updatedEmployee) {
         try {
-            Bson filter = Filters.eq("id", id);
+            Bson filter = Filters.eq("_id", id);
             Bson updates = Updates.combine(
                     Updates.set("firstName", updatedEmployee.getFirstName()),
                     Updates.set("lastName", updatedEmployee.getLastName()),

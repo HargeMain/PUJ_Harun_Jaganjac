@@ -17,8 +17,8 @@ public final class UserController {
     public RegisterResponse resetPassword( String username,String oldPassword, String newPassword) {
         return userService.resetPassword(username, oldPassword, newPassword);
     }
-    public boolean deleteUser(String username) {
-        return userService.deleteUser(username);
+    public boolean deleteUser(String id) {
+        return userService.deleteUser(id);
     }
     public User login(String username, String password) {
         return userService.login(username, password);

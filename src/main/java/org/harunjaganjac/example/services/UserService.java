@@ -105,10 +105,10 @@ public final class UserService {
             return new RegisterResponse("Error resetting password", false, null);
         }
     }
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(String id) {
         try {
-            userCollection.deleteOne(new Document("username", username));
-            DataContext.getLogger().info("User deleted with username: " + username);
+            userCollection.deleteOne(new Document("id", id));
+            DataContext.getLogger().info("User deleted with id: " + id);
             return true;
         } catch (Exception e) {
             DataContext.getLogger().error("Error deleting user: ", e);
