@@ -1,0 +1,43 @@
+[{
+  "_id": {
+    "$oid": "6771385efb274fe989e06a16"
+  },
+  "username": "superadmin_user",
+  "email": "superadmin@example.com",
+  "password": "sakezmaj123",
+  "role": "superadmin",
+  "createdAt": "2024-12-29T00:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "67713abb33637774abe3f462"
+  },
+  "id": "adb21cfc-06c5-4038-a3e7-d8a66dd2e8d7",
+  "username": "harun",
+  "email": "safdsad@dada",
+  "password": "sakezmaj123",
+  "role": "default",
+  "createdAt": "2024-12-29"
+},
+{
+  "_id": {
+    "$oid": "6775b4b7020cdf1e5bdd3bf2"
+  },
+  "id": "5265b9bf-023e-48ac-a1a3-9d458d32809a",
+  "username": "dsadasda",
+  "email": "dsadasdsadad@gmail.com",
+  "password": "5678121",
+  "role": "default",
+  "createdAt": "2025-01-01"
+},
+{
+  "_id": {
+    "$oid": "6775b7d948e5991d786f34ee"
+  },
+  "id": "5c248d4d-25da-4783-a513-11430b9fc640",
+  "username": "gavro",
+  "email": "safdsad@dasdasdasd.com",
+  "password": "test1234",
+  "role": "default",
+  "createdAt": "2025-01-01"
+}]

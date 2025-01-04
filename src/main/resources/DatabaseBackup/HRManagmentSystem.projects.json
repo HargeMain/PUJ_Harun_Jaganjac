@@ -1,0 +1,35 @@
+[{
+  "_id": "proj001",
+  "name": "CRM System Development",
+  "description": "Razvoj sistema za upravljanje odnosima sa klijentima.",
+  "startDate": "2024-01-01",
+  "endDate": null,
+  "assignedEmployees": [
+    "emp001",
+    "emp003",
+    "emp013"
+  ]
+},
+{
+  "_id": "proj002",
+  "name": "Website Redesign",
+  "description": "Redizajn korporativnog sajta.",
+  "startDate": "2023-12-01",
+  "endDate": null,
+  "assignedEmployees": [
+    "emp001",
+    "emp005",
+    "emp014"
+  ]
+},
+{
+  "_id": "proj004",
+  "name": "Inventory Management System",
+  "description": "Sistem za praćenje zaliha i upravljanje skladištima.",
+  "startDate": "2024-02-01",
+  "endDate": null,
+  "assignedEmployees": [
+    "emp006",
+    "emp017"
+  ]
+}]

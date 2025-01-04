@@ -1,0 +1,251 @@
+[{
+  "_id": "emp003",
+  "firstName": "Marko",
+  "lastName": "Kovačević",
+  "position": "Employee",
+  "salary": 55000,
+  "assignedProjects": [
+    "proj001"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp004",
+  "firstName": "Jelena",
+  "lastName": "Lukić",
+  "position": "Employee",
+  "salary": 47000,
+  "assignedProjects": [],
+  "status": "Inactive"
+},
+{
+  "_id": "emp005",
+  "firstName": "Stefan",
+  "lastName": "Marković",
+  "position": "Employee",
+  "salary": 52000,
+  "assignedProjects": [
+    "proj002"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp006",
+  "firstName": "Milica",
+  "lastName": "Nikolić",
+  "position": "Manager",
+  "salary": 85000,
+  "assignedProjects": [
+    "proj004",
+    "proj005"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp007",
+  "firstName": "Petar",
+  "lastName": "Milošević",
+  "position": "Employee",
+  "salary": 48000,
+  "assignedProjects": [
+    "proj006"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp008",
+  "firstName": "Katarina",
+  "lastName": "Živković",
+  "position": "Employee",
+  "salary": 50000,
+  "assignedProjects": [
+    "proj007"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp009",
+  "firstName": "Luka",
+  "lastName": "Stanković",
+  "position": "Employee",
+  "salary": 46000,
+  "assignedProjects": [],
+  "status": "Inactive"
+},
+{
+  "_id": "emp010",
+  "firstName": "Nikola",
+  "lastName": "Đorđević",
+  "position": "Manager",
+  "salary": 78000,
+  "assignedProjects": [
+    "proj008"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp011",
+  "firstName": "Marija",
+  "lastName": "Pavlović",
+  "position": "Employee",
+  "salary": 49000,
+  "assignedProjects": [
+    "proj009"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp012",
+  "firstName": "Nenad",
+  "lastName": "Matić",
+  "position": "Manager",
+  "salary": 88000,
+  "assignedProjects": [
+    "proj010"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp013",
+  "firstName": "Sara",
+  "lastName": "Ilić",
+  "position": "Employee",
+  "salary": 51000,
+  "assignedProjects": [
+    "proj001"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp014",
+  "firstName": "Aleksandar",
+  "lastName": "Radović",
+  "position": "Employee",
+  "salary": 48000,
+  "assignedProjects": [
+    "proj002"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp015",
+  "firstName": "Vuk",
+  "lastName": "Milanković",
+  "position": "Employee",
+  "salary": 46000,
+  "assignedProjects": [],
+  "status": "Inactive"
+},
+{
+  "_id": "emp016",
+  "firstName": "Anđela",
+  "lastName": "Ristić",
+  "position": "Manager",
+  "salary": 90000,
+  "assignedProjects": [
+    "proj003"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp017",
+  "firstName": "Dusan",
+  "lastName": "Savić",
+  "position": "Employee",
+  "salary": 50000,
+  "assignedProjects": [
+    "proj004"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp018",
+  "firstName": "Tamara",
+  "lastName": "Dimitrijević",
+  "position": "Employee",
+  "salary": 49000,
+  "assignedProjects": [
+    "proj005"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp019",
+  "firstName": "Bojan",
+  "lastName": "Živanović",
+  "position": "Employee",
+  "salary": 47000,
+  "assignedProjects": [
+    "proj006"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "emp020",
+  "firstName": "Milana",
+  "lastName": "Stević",
+  "position": "Employee",
+  "salary": 52000,
+  "assignedProjects": [
+    "proj007",
+    "proj008"
+  ],
+  "status": "Active"
+},
+{
+  "_id": {
+    "$oid": "676b2876dde092603cc66765"
+  },
+  "id": "1",
+  "firstName": "John",
+  "lastName": "Doe",
+  "position": "Software Engineer",
+  "salary": 1000,
+  "assignedProjects": [
+    "1",
+    "2"
+  ],
+  "status": "Active"
+},
+{
+  "_id": "1",
+  "firstName": "John",
+  "lastName": "Doe",
+  "position": "Software Engineer",
+  "salary": 1000,
+  "assignedProjects": [
+    "1",
+    "2"
+  ],
+  "status": "Active"
+},
+{
+  "_id": {
+    "$oid": "676b2a9b3c9a8b2b7c7dcf07"
+  },
+  "id": "1",
+  "firstName": "John",
+  "lastName": "Doe",
+  "position": "Software Engineer",
+  "salary": 1000,
+  "assignedProjects": [
+    "1",
+    "2"
+  ],
+  "status": "Active"
+},
+{
+  "_id": {
+    "$oid": "676c76bd452a5161b7940fd9"
+  },
+  "id": "0e5b877b-5301-4afb-89f9-33eee8fd11d5",
+  "firstName": "John",
+  "lastName": "Doe",
+  "position": "Software Engineer",
+  "salary": 1000,
+  "assignedProjects": [
+    "1",
+    "2"
+  ],
+  "status": "Active"
+}]
