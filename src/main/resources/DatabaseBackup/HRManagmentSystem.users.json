@@ -1,43 +1,33 @@
 [{
   "_id": {
-    "$oid": "6771385efb274fe989e06a16"
+    "$oid": "677d87624a181f23dbe98b9d"
   },
-  "username": "superadmin_user",
-  "email": "superadmin@example.com",
-  "password": "sakezmaj123",
+  "id": "3831554a-fc9f-444a-8135-eaabe80947eb",
+  "username": "superadmin",
+  "email": "ipi12345",
+  "password": "superadmin",
   "role": "superadmin",
-  "createdAt": "2024-12-29T00:00:00Z"
+  "createdAt": "2025-01-07"
 },
 {
   "_id": {
-    "$oid": "67713abb33637774abe3f462"
+    "$oid": "677d880668c38d748880e909"
   },
-  "id": "adb21cfc-06c5-4038-a3e7-d8a66dd2e8d7",
-  "username": "harun",
-  "email": "safdsad@dada",
-  "password": "sakezmaj123",
-  "role": "default",
-  "createdAt": "2024-12-29"
+  "id": "df4d819f-fd9b-4ae0-8df8-fd882cf71852",
+  "username": "Harun",
+  "email": "dasdasd@dsadasd",
+  "password": "67898762",
+  "role": "Default",
+  "createdAt": "2025-01-07"
 },
 {
   "_id": {
-    "$oid": "6775b4b7020cdf1e5bdd3bf2"
+    "$oid": "677da39483033d42013749ca"
   },
-  "id": "5265b9bf-023e-48ac-a1a3-9d458d32809a",
-  "username": "dsadasda",
-  "email": "dsadasdsadad@gmail.com",
-  "password": "5678121",
-  "role": "default",
-  "createdAt": "2025-01-01"
-},
-{
-  "_id": {
-    "$oid": "6775b7d948e5991d786f34ee"
-  },
-  "id": "5c248d4d-25da-4783-a513-11430b9fc640",
-  "username": "gavro",
-  "email": "safdsad@dasdasdasd.com",
-  "password": "test1234",
-  "role": "default",
-  "createdAt": "2025-01-01"
+  "id": "d5c775cf-6e9a-4d82-8ac9-4caad5c42a72",
+  "username": "Testdasdasd",
+  "email": "saddasd@dasdasd",
+  "password": "p32323131",
+  "role": "Admin",
+  "createdAt": "2025-01-07"
 }]

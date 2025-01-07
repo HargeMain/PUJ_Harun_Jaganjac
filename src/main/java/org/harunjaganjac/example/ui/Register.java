@@ -49,7 +49,7 @@ public class Register extends BaseForm {
     });
         registerButton.addActionListener(e -> {
             dispose();
-            new UserCreator();
+            new UserCreator(false);
         });
         hideShowPasswordButton.addActionListener(e -> {
             if(passwordField.getEchoChar()==0){

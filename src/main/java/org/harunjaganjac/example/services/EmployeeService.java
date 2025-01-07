@@ -8,6 +8,7 @@ import org.bson.conversions.Bson;
 import org.harunjaganjac.example.datacontext.DataContext;
 import org.harunjaganjac.example.helpers.GeneratorHelpers;
 import org.harunjaganjac.example.models.Employee;
+import org.harunjaganjac.example.response.EmployeeResponse;
 import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ public final class EmployeeService {
         this.employeeCollection = DataContext.database.getCollection(CollectionNames.EMPLOYEES);
     }
 
-    public boolean createEmployee(Employee employee) {
+    public EmployeeResponse createEmployee(Employee employee) {
         try {
             String newId = GeneratorHelpers.generateId();
             employee.setId(newId);
-            Document doc = new Document("_id", employee.getId())
+            Document doc = new Document("id", employee.getId())
                     .append("firstName", employee.getFirstName())
                     .append("lastName", employee.getLastName())
                     .append("position", employee.getPosition())
@@ -34,10 +35,10 @@ public final class EmployeeService {
                     .append("status", employee.getStatus());
             employeeCollection.insertOne(doc);
             DataContext.getLogger().info("Employee created with ID: " + newId);
-            return true;
+            return new EmployeeResponse("Employee created successfully", true,newId);
         } catch (Exception e) {
             DataContext.getLogger().error("Error creating employee: ", e);
-            return false;
+            return new EmployeeResponse("Error creating employee", false,null);
         }
     }
     public Employee getEmployeeById(String id) {
@@ -45,7 +46,7 @@ public final class EmployeeService {
             Document doc = employeeCollection.find(Filters.eq("id", id)).first();
             if (doc != null) {
                 return new Employee(
-                        doc.getString("_id"),
+                        doc.getString("id"),
                         doc.getString("firstName"),
                         doc.getString("lastName"),
                         doc.getString("position"),
@@ -61,9 +62,9 @@ public final class EmployeeService {
         }
     }
 
-    public boolean updateEmployee(String id, Employee updatedEmployee) {
+    public EmployeeResponse updateEmployee(String id, Employee updatedEmployee) {
         try {
-            Bson filter = Filters.eq("_id", id);
+            Bson filter = Filters.eq("id", id);
             Bson updates = Updates.combine(
                     Updates.set("firstName", updatedEmployee.getFirstName()),
                     Updates.set("lastName", updatedEmployee.getLastName()),
@@ -73,10 +74,10 @@ public final class EmployeeService {
             );
             employeeCollection.updateOne(filter, updates);
             DataContext.getLogger().info("Employee updated with ID: " + id);
-            return true;
+            return new EmployeeResponse("Employee updated successfully", true,id);
         } catch (Exception e) {
             DataContext.getLogger().error("Error updating employee: ", e);
-            return false;
+            return new EmployeeResponse("Error updating employee", false,null);
         }
     }
 
@@ -110,6 +111,18 @@ public final class EmployeeService {
             return null;
         }
         return employees;
+    }
+    public List<String> getAllEmployeeIds() {
+        List<String> employeeIds = new ArrayList<>();
+        try {
+            for (Document doc : employeeCollection.find()) {
+                employeeIds.add(doc.getString("id"));
+            }
+        } catch (Exception e) {
+            DataContext.getLogger().error("Error getting all employee ids: ", e);
+            return null;
+        }
+        return employeeIds;
     }
 
     public void disconnect() {

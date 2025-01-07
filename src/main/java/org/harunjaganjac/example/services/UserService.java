@@ -24,6 +24,24 @@ public final class UserService {
         this.userCollection = DataContext.database.getCollection(CollectionNames.USERS);
     }
 
+    //SuperAdmin seed if not exists
+    public void seedSuperAdmin(){
+        Document doc = userCollection.find(Filters.eq("role", "superadmin")).first();
+        if(doc == null){
+            String newId = GeneratorHelpers.generateId();
+            User user = new User(newId, "superadmin", "ipi12345", "superadmin", "superadmin");
+            user.setCreatedAt(LocalDate.now().toString());
+            Document superAdmin = new Document("id", user.getId())
+                    .append("username", user.getUsername())
+                    .append("email", user.getEmail())
+                    .append("password", user.getPassword())
+                    .append("role", user.getRole())
+                    .append("createdAt", user.getCreatedAt());
+            userCollection.insertOne(superAdmin);
+            DataContext.getLogger().info("SuperAdmin created with ID: " + newId);
+        }
+    }
+
     public User login(String username, String password) {
         try {
             Document doc = userCollection.find(Filters.and(

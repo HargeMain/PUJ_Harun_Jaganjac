@@ -21,6 +21,14 @@ public class Employee {
         this.assignedProjects = assignedProjects;
         this.status = status;
     }
+    public Employee( String firstName, String lastName, String position, int salary, List<String> assignedProjects, String status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.position = position;
+        this.salary = salary;
+        this.assignedProjects = assignedProjects;
+        this.status = status;
+    }
     // Constructor --END--
 
     // Getters and Setters --START--

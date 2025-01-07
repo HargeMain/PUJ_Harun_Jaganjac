@@ -1,33 +1,43 @@
 package org.harunjaganjac.example.controllers;
 
 import org.harunjaganjac.example.models.Project;
+import org.harunjaganjac.example.response.ProjectResponse;
+import org.harunjaganjac.example.response.RegisterResponse;
 import org.harunjaganjac.example.services.EmployeeProjectService;
 import org.harunjaganjac.example.services.ProjectService;
 
 import java.util.List;
 
 public final class ProjectController {
-    private final ProjectService employeeService;
+    private final ProjectService projectService;
     private final EmployeeProjectService employeeProjectService;
 
-    public ProjectController(ProjectService employeeService, EmployeeProjectService employeeProjectService) {
-        this.employeeService = employeeService;
+    public ProjectController(ProjectService projectService, EmployeeProjectService employeeProjectService) {
+        this.projectService = projectService;
         this.employeeProjectService = employeeProjectService;
     }
-    public boolean createProject(Project newProject) {
-        return employeeService.createProject(newProject);
+    public ProjectResponse createProject(Project newProject) {
+        return projectService.createProject(newProject);
     }
     public Project getProject(String id) {
-        return employeeService.getProjectById(id);
+        return projectService.getProjectById(id);
     }
-    public boolean updateProject(String id, Project updatedProject) {
-        return employeeService.updateProject(id, updatedProject);
+    public ProjectResponse updateProject(String id, Project updatedProject) {
+        return projectService.updateProject(id, updatedProject);
     }
     public boolean deleteProject(String id) {
-        return employeeService.deleteProject(id);
+        var result=employeeProjectService.removeProject(id);
+        if(result){
+            return projectService.deleteProject(id);
+        }
+        return false;
     }
+    public List<String> getAssignedEmployees(String projectId) {
+        return employeeProjectService.getAssignedEmployees(projectId);
+    }
+
     public List<Project> getAllProjects() {
-        return employeeService.getAllProjects();
+        return projectService.getAllProjects();
     }
     public boolean assignEmployee(String projectId, String employeeId) {
         return employeeProjectService.assignProject(projectId, employeeId);

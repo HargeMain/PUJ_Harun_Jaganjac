@@ -17,12 +17,21 @@ public class UserCreator extends BaseForm {
     private JTextField confirmPasswordField;
     private JTextField emailField;
     private JPanel mainPanel;
+    private JComboBox roleList;
+    private JLabel roleTitle;
     private final UserService userService;
 
-    UserCreator(){
+    UserCreator(boolean isAdmin){
         super(false);
         this.userService=new UserService();
         setContentPane(mainPanel);
+        if(!isAdmin){
+        roleList.setVisible(false);
+        roleTitle.setVisible(false);
+        }else{
+            roleList.addItem("Admin");
+            roleList.addItem("Default");
+        }
         createUser.addActionListener(e -> {
             UserController userController=new UserController(userService);
             var username= usernameField.getText();
@@ -38,11 +47,20 @@ public class UserCreator extends BaseForm {
             if(!TestValidationsEmail(email)){
                 return;
             }
-            var user=userController.createUser(username,password,email,"default");
+            if(isAdmin){
+                if(roleList.getSelectedItem()==null){
+                    JOptionPane.showMessageDialog(null, "Role is not selected", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            String role=isAdmin?roleList.getSelectedItem().toString():"default";
+            var user=userController.createUser(username,password,email,role);
             if(user.isSuccess()) {
                 JOptionPane.showMessageDialog(null, "User created successfully");
                 dispose();
-                new Register(user.getUser());
+                if(!isAdmin) {
+                    new Register(user.getUser());
+                }
             }else{
                 JOptionPane.showMessageDialog(null, user.getMessage());
             }

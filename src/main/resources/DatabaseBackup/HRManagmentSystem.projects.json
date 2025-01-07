@@ -1,35 +1,28 @@
 [{
-  "_id": "proj001",
-  "name": "CRM System Development",
-  "description": "Razvoj sistema za upravljanje odnosima sa klijentima.",
-  "startDate": "2024-01-01",
-  "endDate": null,
+  "_id": {
+    "$oid": "677d8e0d86ced6098185783a"
+  },
+  "id": "a48133e7-b35b-48c4-8088-10a8304a5f08",
+  "name": "sadasd",
+  "description": "asdasdasda",
+  "startDate": "2025-01-07",
+  "endDate": "2025-01-07",
   "assignedEmployees": [
-    "emp001",
-    "emp003",
-    "emp013"
+    "bae4957d-bf85-4330-b28e-39c91bde3a5d",
+    "92eec80f-d85b-43d1-829a-dd072d5f8bb1"
   ]
 },
 {
-  "_id": "proj002",
-  "name": "Website Redesign",
-  "description": "Redizajn korporativnog sajta.",
-  "startDate": "2023-12-01",
-  "endDate": null,
+  "_id": {
+    "$oid": "677da36f83033d42013749c8"
+  },
+  "id": "d7bfe816-e1fc-4617-a097-438102395763",
+  "name": "dsadsa",
+  "description": "dsadsadada",
+  "startDate": "2025-01-07",
+  "endDate": "2025-01-07",
   "assignedEmployees": [
-    "emp001",
-    "emp005",
-    "emp014"
-  ]
-},
-{
-  "_id": "proj004",
-  "name": "Inventory Management System",
-  "description": "Sistem za praćenje zaliha i upravljanje skladištima.",
-  "startDate": "2024-02-01",
-  "endDate": null,
-  "assignedEmployees": [
-    "emp006",
-    "emp017"
+    "bae4957d-bf85-4330-b28e-39c91bde3a5d",
+    "92eec80f-d85b-43d1-829a-dd072d5f8bb1"
   ]
 }]

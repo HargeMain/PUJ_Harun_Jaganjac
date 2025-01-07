@@ -20,6 +20,13 @@ public class Project {
         this.endDate = endDate;
         this.assignedEmployees = assignedEmployees;
     }
+    public Project( String name, String description, String startDate, String endDate, List<String> assignedEmployees) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.assignedEmployees = assignedEmployees;
+    }
     // Constructor --END--
     // Getters and Setters --START--
     public String getId() {

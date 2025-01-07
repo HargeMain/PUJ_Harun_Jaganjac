@@ -19,8 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.List;
@@ -37,6 +35,7 @@ public class Dashboard extends BaseForm {
     private JLabel loggedUser;
     private JLabel role;
     private JButton logOutButton;
+    private JLabel moduleName;
     private final UserService userService;
     private final ProjectService projectService;
     private final EmployeeProjectService employeeProjectService;
@@ -45,13 +44,15 @@ public class Dashboard extends BaseForm {
     public Dashboard(User user) {
         super(true);
         setContentPane(mainPanel);
-        setSize(1024,1024);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(1024, screenSize.height);
         loggedUser.setText(user.getUsername());
-        role.setText(user.getRole());
-        this.userService=new UserService();
-        this.projectService=new ProjectService();
-        this.employeeService=new EmployeeService();
-        this.employeeProjectService=new EmployeeProjectService();
+        role.setText(user.getRole().toUpperCase());
+        this.userService = new UserService();
+        this.projectService = new ProjectService();
+        this.employeeService = new EmployeeService();
+        this.employeeProjectService = new EmployeeProjectService();
+        JOptionPane.showMessageDialog(this,"WELCOME TO THE HR DASHBOARD "+user.getUsername()+"!"+"\nPlease note that this application is for demonstration purposes only. Do not use real data.\nOpen the application guide to learn more about the functionalities.");
         setSvgIcons("/images/2users-svgrepo-com.svg", usersNav);
         setSvgIcons("/images/employees-svgrepo-com.svg", employeesNav);
         setSvgIcons("/images/book-open-svgrepo-com.svg", applicationGuide);
@@ -61,100 +62,193 @@ public class Dashboard extends BaseForm {
             dispose();
             new Register(user);
         });
-        projectsNav.addActionListener(e -> {
-            try{
-                selectedNav(projectsNav);
-                rotationScreen.removeAll();
-                rotationScreen.setLayout(new BorderLayout());
-                var projectController = new ProjectController(projectService,employeeProjectService);
-                var projects = projectController.getAllProjects();
-                var table=createGenericTable(projects,user.getRole());
-                rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
-                rotationScreen.revalidate();
-                rotationScreen.repaint();
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
-        });
-        employeesNav.addActionListener(e -> {
-            try{
-                selectedNav(employeesNav);
-                rotationScreen.removeAll();
-                rotationScreen.setLayout(new BorderLayout());
-                var employeeController = new EmployeeController(employeeService,employeeProjectService);
-                var employees = employeeController.getAllEmployees();
-                var table=createGenericTable(employees,user.getRole());
-                rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
-                rotationScreen.revalidate();
-                rotationScreen.repaint();
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
-        });
-        usersNav.addActionListener(e -> {
-            try{
-                selectedNav(usersNav);
-                rotationScreen.removeAll();
-                rotationScreen.setLayout(new BorderLayout());
-                var users = userService.getAllUsers();
-                var table=createGenericTable(users,user.getRole());
-                rotationScreen.add(new JScrollPane(table),BorderLayout.CENTER);
-                rotationScreen.revalidate();
-                rotationScreen.repaint();
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
-
-        });
-        applicationGuide.addActionListener(e -> {
-            try {
-                selectedNav(applicationGuide);
-                rotationScreen.removeAll();
-                rotationScreen.setLayout(new BorderLayout());
-
-                var textArea = new JTextPane();
-                textArea.setContentType("text/html");
-                textArea.setText(
-                        "<html>" +
-                                "<body style='font-family: Arial, sans-serif;'>" +
-                                "<h1>Welcome to the Application Guide for HR Dashboard!</h1>" +
-                                "<p>This application allows you to manage projects, employees, and users. Here is a brief overview of what each role can do:</p>" +
-                                "<h2>Superadmin</h2>" +
-                                "<ul>" +
-                                "<li>Full access to all features.</li>" +
-                                "<li>Can create, read, update, and delete (CRUD) users, projects, and employees.</li>" +
-                                "</ul>" +
-                                "<h2>Admin</h2>" +
-                                "<ul>" +
-                                "<li>Can manage projects and employees.</li>" +
-                                "<li>Can create, read, update, and delete (CRUD) projects and employees.</li>" +
-                                "<li>Cannot manage users.</li>" +
-                                "</ul>" +
-                                "<h2>Default</h2>" +
-                                "<ul>" +
-                                "<li>Can view data of projects and employees.</li>" +
-                                "<li>Cannot access user management features.</li>" +
-                                "</ul>" +
-                                "<p>Use the navigation buttons to switch between different sections of the application. Each section provides specific functionalities based on your role.</p>" +
-                                "</body>" +
-                                "</html>"
-                );
-                textArea.setEditable(false);
-
-                rotationScreen.add(new JScrollPane(textArea), BorderLayout.CENTER);
-                rotationScreen.revalidate();
-                rotationScreen.repaint();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        projectsNav.addActionListener(e -> loadProjectsTable(user.getRole()));
+        employeesNav.addActionListener(e -> loadEmployeesTable(user.getRole()));
+        usersNav.addActionListener(e -> loadUsersTable(user.getRole()));
+        applicationGuide.addActionListener(e -> loadApplicationGuide());
         resetPasswordButton.addActionListener(e -> {
-        dispose();
-        new ResetPassword(false,user);
+            dispose();
+            new ResetPassword(false, user);
         });
     }
 
-    //Inner helpers --START
+    private void loadProjectsTable(String role) {
+        try {
+            selectedNav(projectsNav);
+            rotationScreen.removeAll();
+            rotationScreen.setLayout(new BorderLayout());
+            var projectController = new ProjectController(projectService, employeeProjectService);
+            var projects = projectController.getAllProjects();
+            var table = createGenericTable(projects, role);
+            addCrudButton(rotationScreen, "Add Project", () -> {
+                ProjectAddEdit projectAddEdit = new ProjectAddEdit("New project", "");
+                projectAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        refreshProjectsTable();
+                    }
+                });
+            },role);
+            rotationScreen.add(new JScrollPane(table), BorderLayout.CENTER);
+            rotationScreen.revalidate();
+            rotationScreen.repaint();
+            moduleName.setText("Projects");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadEmployeesTable(String role) {
+        try {
+            selectedNav(employeesNav);
+            rotationScreen.removeAll();
+            rotationScreen.setLayout(new BorderLayout());
+            var employeeController = new EmployeeController(employeeService, employeeProjectService);
+            var employees = employeeController.getAllEmployees();
+            var table = createGenericTable(employees, role);
+            addCrudButton(rotationScreen, "Add Employee", () -> {
+                EmployeeAddEdit employeeAddEdit = new EmployeeAddEdit("New employee", "");
+                employeeAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        refreshEmployeesTable();
+                    }
+                });
+            },role);
+            rotationScreen.add(new JScrollPane(table), BorderLayout.CENTER);
+            rotationScreen.revalidate();
+            rotationScreen.repaint();
+            moduleName.setText("Employees");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadUsersTable(String role) {
+        try {
+            selectedNav(usersNav);
+            rotationScreen.removeAll();
+            rotationScreen.setLayout(new BorderLayout());
+            var users = userService.getAllUsers();
+            var table = createGenericTable(users, role);
+            addCrudButton(rotationScreen, "Add User", () -> {
+                UserCreator userAddEdit = new UserCreator(true);
+                userAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        refreshUsersTable();
+                    }
+                });
+            },role);
+            rotationScreen.add(new JScrollPane(table), BorderLayout.CENTER);
+            rotationScreen.revalidate();
+            rotationScreen.repaint();
+            moduleName.setText("Users");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadApplicationGuide() {
+        try {
+            selectedNav(applicationGuide);
+            rotationScreen.removeAll();
+            rotationScreen.setLayout(new BorderLayout());
+
+            var textArea = new JTextPane();
+            textArea.setContentType("text/html");
+            textArea.setText(
+                    "<html>" +
+                            "<head>" +
+                            "<style>" +
+                            "@keyframes fadeIn {" +
+                            "  from { opacity: 0; }" +
+                            "  to { opacity: 1; }" +
+                            "}" +
+                            "body {" +
+                            "  font-family: Arial, sans-serif;" +
+                            "  background-color: #f0f0f0;" +
+                            "  animation: fadeIn 2s ease-in-out;" +
+                            "}" +
+                            "h1, h2 {" +
+                            "  color: #800080;" +
+                            "  animation: fadeIn 2s ease-in-out;" +
+                            "}" +
+                            "ul {" +
+                            "  list-style-type: none;" +
+                            "  padding: 0;" +
+                            "}" +
+                            "li {" +
+                            "  background: #800080;" +
+                            "  color: white;" +
+                            "  margin: 5px 0;" +
+                            "  padding: 10px;" +
+                            "  border-radius: 5px;" +
+                            "  animation: fadeIn 2s ease-in-out;" +
+                            "}" +
+                            "p {" +
+                            "  animation: fadeIn 2s ease-in-out;" +
+                            "}" +
+                            "</style>" +
+                            "</head>" +
+                            "<body>" +
+                            "<h1>Welcome to the Application Guide for HR Dashboard!</h1>" +
+                            "<p>This application allows you to manage projects, employees, and users. Here is a brief overview of what each role can do:</p>" +
+                            "<h2>Superadmin</h2>" +
+                            "<ul>" +
+                            "<li>Full access to all features.</li>" +
+                            "<li>Can create, read, update, and delete (CRUD)  projects, and employees.</li>" +
+                            "<li>Can control access to the app(user- can add them, can delete them)</li>" +
+                            "</ul>" +
+                            "<h2>Admin</h2>" +
+                            "<ul>" +
+                            "<li>Can manage projects and employees.</li>" +
+                            "<li>Can create, read, update, and delete (CRUD) projects and employees.</li>" +
+                            "<li>Cannot manage users.</li>" +
+                            "</ul>" +
+                            "<h2>Default</h2>" +
+                            "<ul>" +
+                            "<li>Can view data of projects and employees.</li>" +
+                            "<li>Cannot access user management features.</li>" +
+                            "</ul>" +
+                            "<p>Use the navigation buttons to switch between different sections of the application. Each section provides specific functionalities based on your role.</p>" +
+                            "</body>" +
+                            "</html>"
+            );
+            textArea.setEditable(false);
+
+            rotationScreen.add(new JScrollPane(textArea), BorderLayout.CENTER);
+            rotationScreen.revalidate();
+            rotationScreen.repaint();
+            moduleName.setText("Application Guide");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void addCrudButton(JPanel panel, String buttonText, Runnable action,String role) {
+        JButton button = new JButton(buttonText);
+        if (role.equals("default")) {
+            button.setEnabled(false);
+        }
+        button.addActionListener(e -> action.run());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(button);
+        panel.add(buttonPanel, BorderLayout.NORTH);
+    }
+
+    private void refreshProjectsTable() {
+        loadProjectsTable(role.getText());
+    }
+
+    private void refreshEmployeesTable() {
+        loadEmployeesTable(role.getText());
+    }
+
+    private void refreshUsersTable() {
+        loadUsersTable(role.getText());
+    }
+
     private void setSvgIcons(String path, JButton button) {
         try {
             URL iconURL = getClass().getResource(path);
@@ -168,6 +262,7 @@ public class Dashboard extends BaseForm {
             e.printStackTrace();
         }
     }
+
     private <T> JTable createGenericTable(List<T> data, String role) {
         if (data == null || data.isEmpty()) {
             return new JTable();
@@ -249,24 +344,79 @@ public class Dashboard extends BaseForm {
             popupMenu.add(editItem);
             popupMenu.add(deleteItem);
 
+            if(clazz.equals(User.class)){
+                editItem.setVisible(false);
+            }
+
             table.setComponentPopupMenu(popupMenu);
+            table.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    int row = table.rowAtPoint(e.getPoint());
+                    table.getSelectionModel().setSelectionInterval(row, row);
+                    if (e.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+                        popupMenu.show(table, e.getX(), e.getY());
+                    }
+                }
+            });
+            table.setSelectionBackground(Color.decode("#800080"));
+            table.setSelectionForeground(Color.WHITE);
 
             addItem.addActionListener(e -> {
-                // Implement add functionality
-                // Example: show a dialog to add a new item
+                if (clazz.equals(Project.class)) {
+                    ProjectAddEdit projectAddEdit = new ProjectAddEdit("New project", "");
+                    projectAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                            refreshProjectsTable();
+                        }
+                    });
+                } else if (clazz.equals(Employee.class)) {
+                    EmployeeAddEdit employeeAddEdit = new EmployeeAddEdit("New employee", "");
+                    employeeAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                            refreshEmployeesTable();
+                        }
+                    });
+                }else if(clazz.equals(User.class)){
+                    UserCreator userAddEdit = new UserCreator(true);
+                    userAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                            refreshUsersTable();
+                        }
+                    });
+                }
             });
 
             editItem.addActionListener(e -> {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     Object id = table.getValueAt(selectedRow, 0);
+                    if (clazz.equals(Project.class)) {
+                        ProjectAddEdit projectAddEdit = new ProjectAddEdit("Edit project", (String) id);
+                        projectAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                                refreshProjectsTable();
+                            }
+                        });
+                    } else if (clazz.equals(Employee.class)) {
+                        EmployeeAddEdit employeeAddEdit = new EmployeeAddEdit("Edit employee", (String) id);
+                        employeeAddEdit.addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                                refreshEmployeesTable();
+                            }
+                        });
+                    }
                 }
             });
-
             deleteItem.addActionListener(e -> {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
-                    int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete "+table.getValueAt(selectedRow, 1)+" ?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+                    int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + table.getValueAt(selectedRow, 1) + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
                     if (response == JOptionPane.YES_OPTION) {
                         Object id = table.getValueAt(selectedRow, 0);
                         if (clazz.equals(User.class)) {
@@ -289,31 +439,26 @@ public class Dashboard extends BaseForm {
         }
         return table;
     }
-    private void selectedNav(JButton buttonThatWasClicked){
-        var buttons = new JButton[]{projectsNav,usersNav, applicationGuide,employeesNav};
-        for (var button:buttons) {
-            if(button.equals(buttonThatWasClicked)){
+
+    private void selectedNav(JButton buttonThatWasClicked) {
+        var buttons = new JButton[]{projectsNav, usersNav, applicationGuide, employeesNav};
+        for (var button : buttons) {
+            if (button.equals(buttonThatWasClicked)) {
                 button.setBackground(Color.decode("#800080"));
                 button.setForeground(Color.WHITE);
-
-            }else{
+            } else {
                 button.setBackground(Color.WHITE);
-                button.setForeground(Color.BLACK);
+                button.setForeground(Color.decode("#800080"));
             }
         }
-
     }
-    private void adjustRoles(String role){
-        if(!role.equals("superadmin")){
+
+    private void adjustRoles(String role) {
+        if (!role.equals("superadmin")) {
             usersNav.setEnabled(false);
             usersNav.setContentAreaFilled(false);
             usersNav.setFocusPainted(false);
             usersNav.setOpaque(false);
         }
     }
-
-    //Inner helpers --END
 }
-
-
-

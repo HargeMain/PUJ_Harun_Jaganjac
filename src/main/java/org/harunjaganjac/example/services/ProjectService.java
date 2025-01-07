@@ -9,6 +9,8 @@ import org.harunjaganjac.example.datacontext.DataContext;
 import org.harunjaganjac.example.helpers.GeneratorHelpers;
 import org.harunjaganjac.example.models.Employee;
 import org.harunjaganjac.example.models.Project;
+import org.harunjaganjac.example.response.ProjectResponse;
+import org.harunjaganjac.example.response.RegisterResponse;
 import org.harunjaganjac.example.staticdata.CollectionNames;
 
 import java.time.LocalDate;
@@ -21,7 +23,7 @@ public final class ProjectService {
         DataContext.connect();
         this.projectCollection = DataContext.database.getCollection(CollectionNames.PROJECTS);
     }
-    public boolean createProject(Project project) {
+    public ProjectResponse createProject(Project project) {
         try {
             String newId = GeneratorHelpers.generateId();
             project.setId(newId);
@@ -33,10 +35,10 @@ public final class ProjectService {
                     .append("assignedEmployees", (List<String>)project.getAssignedEmployees());
             projectCollection.insertOne(doc);
             DataContext.getLogger().info("Project created with ID: " + doc.getString("id"));
-            return true;
+            return new ProjectResponse("Project created with ID: " + doc.getString("id"), true,doc.getString("id"));
         } catch (Exception e) {
             DataContext.getLogger().error("Error creating project: ", e);
-            return false;
+            return new ProjectResponse("Error creating project: ", false,"");
         }
     }
     public Project getProjectById(String id) {
@@ -58,7 +60,7 @@ public final class ProjectService {
             return null;
         }
     }
-    public boolean updateProject(String id, Project updatedProject) {
+    public ProjectResponse updateProject(String id, Project updatedProject) {
         try {
             Bson filter = Filters.eq("id", id);
             Bson updates = Updates.combine(
@@ -69,15 +71,15 @@ public final class ProjectService {
             );
             projectCollection.updateOne(filter, updates);
             DataContext.getLogger().info("Project updated with ID: " + id);
-            return true;
+            return new ProjectResponse("Project updated with ID: " + id, true,id);
         } catch (Exception e) {
             DataContext.getLogger().error("Error updating project: ", e);
-            return false;
+            return new ProjectResponse("Error updating project: ", false,"");
         }
     }
     public boolean deleteProject(String id) {
         try {
-            projectCollection.deleteOne(new Document("_id", id));
+            projectCollection.deleteOne(new Document("id", id));
             DataContext.getLogger().info("Project deleted with ID: " + id);
             return true;
         } catch (Exception e) {
@@ -90,7 +92,7 @@ public final class ProjectService {
             List<Project> projects = new ArrayList<>();
             for (Document doc : projectCollection.find()) {
                 projects.add(new Project(
-                        doc.getString("_id"),
+                        doc.getString("id"),
                         doc.getString("name"),
                         doc.getString("description"),
                         doc.getString("startDate"),
