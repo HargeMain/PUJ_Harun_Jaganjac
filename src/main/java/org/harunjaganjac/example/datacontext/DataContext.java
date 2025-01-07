@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class DataContext {
-    private static final String CONNECTION_STRING = "mongodb://localhost:27017";
+    public static String CONNECTION_STRING = "mongodb+srv://HargeAdmin:TestDashboard@hrmanagmentsystem.899ra.mongodb.net/";
     private static final String DATABASE_NAME = "HRManagmentSystem";
     private static MongoClient mongoClient;
     public static MongoDatabase database;
